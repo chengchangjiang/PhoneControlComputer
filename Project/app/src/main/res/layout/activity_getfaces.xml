@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@drawable/background"
+    tools:context="com.example.shea.project.Getfaces">
+
+
+
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="80dp">
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:id="@+id/photo1"
+            />
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:id="@+id/photo2"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toEndOf="@+id/photo1" />
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:layout_toEndOf="@+id/photo2"
+            android:layout_marginLeft="10dp"
+
+            android:id="@+id/photo3" />
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
+            android:layout_toEndOf="@+id/photo3"
+            android:id="@+id/photo4" />
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_toEndOf="@+id/photo4"
+            android:id="@+id/photo5"
+            />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/GetFaces"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/roundbutton"
+        style="?android:textAppearanceSmall"
+        android:textStyle="bold"
+        android:text="签 到" />
+    <TextView
+        android:layout_width="250dp"
+        android:layout_centerHorizontal="true"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/GetFaces"
+        android:layout_marginTop="20dp"
+        android:text="请点击下方的图标添加自己照片，为数据库中写入数据。我们需要为您采集五张可用的照片作为识别依据。之后您可以点击签到按钮来进行第一次签到。"
+        android:textColor="@color/colorchangepsd"
+        />
+
+</RelativeLayout>
