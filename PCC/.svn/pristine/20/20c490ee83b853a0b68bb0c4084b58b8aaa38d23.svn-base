@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    android:background="@drawable/background_8">
+
+    <Button
+        android:id="@+id/btnSD0No"
+        android:layout_width="163dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/btnSD0Yep"
+        android:layout_alignBottom="@+id/btnSD0Yep"
+        android:layout_alignParentRight="true"
+        android:text="取消" />
+
+    <TextView
+        android:id="@+id/btnResetTime"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="54dp"
+        android:gravity="center"
+        android:text="时间未设置，请设置时间" />
+
+    <TimePicker
+        android:id="@+id/timePicker1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnResetTime"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp" />
+
+    <Button
+        android:id="@+id/btnSD0Yep"
+        android:layout_width="163dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="58dp"
+        android:text="确定" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_below="@+id/timePicker1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="28dp"
+        android:text="请设置关机时间！"
+      />
+
+</RelativeLayout>

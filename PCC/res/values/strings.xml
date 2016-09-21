@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">PCC</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- 自定义mDialog -->
+    <string name="finish">完成</string>
+    <string name="loding">搜索主机..</string>
+    <string name="juge_pc_is_shutdown">查询主机状态</string>
+    <string name="photo_update_success">照片上传成功!</string>
+    <string name="photo_update_fail">照片上传失败!</string>
+    <string name="photo_update_ing">照片上传中……</string>
+    <string name="set_shutdown_over">已设置关机</string>
+</resources>

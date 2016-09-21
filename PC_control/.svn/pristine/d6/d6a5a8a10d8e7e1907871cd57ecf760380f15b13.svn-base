@@ -1,0 +1,14 @@
+package mobile.control;
+
+public class CommandConstant {
+	
+	public static final String SHUT_DOWN = "ShutDown";
+	public static final String SHUT_DOWN_CANCEL = "ShutDownCancel";
+	public static final String SHUT_DOWN_WITH_TIME = "ShutDownWithTime";
+	public static final String SHUT_DOWN_TRUE = "ShutDownTrue";
+	public static final String SHUT_DOWN_FALSE = "ShutDownFalse";
+	public static final String RESET_SHUT_DOWN = "ReSetShutDown";
+	public static final String SEARCH_PC = "SearchPc";
+	public static final String REPLY_PING = "ReplyPing";
+	
+}

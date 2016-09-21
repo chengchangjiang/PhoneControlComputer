@@ -1,0 +1,52 @@
+package pccontrol;
+
+/**
+ * 约定好的命令
+ * @author lqq
+ *
+ */
+public class CommandConstant {
+	
+	/**
+	 * 关机指令
+	 */
+	public static final String SHUT_DOWN = "ShutDown";
+	public static final String SHUT_DOWN_CANCEL = "ShutDownCancel";
+	public static final String SHUT_DOWN_WITH_TIME = "ShutDownWithTime";
+	public static final String RESET_SHUT_DOWN = "ReSetShutDown";
+	/**
+	 * 关机查询
+	 */
+	public static final String IS_SHUT_DOWN = "IsShutDown";
+	public static final String SHUT_DOWN_TRUE = "ShutDownTrue";
+	public static final String SHUT_DOWN_FALSE = "ShutDownFalse";
+	/**
+	 * 查找设备
+	 */
+	public static final String SEARCH_PC = "SearchPc";
+	public static final String REPLY_PING = "ReplyPing";
+	/**
+	 * 功能
+	 */
+	public static final String CONTROL_MUSIC = "ControlMusic";
+	public static final String SHAKE_MUSIC = "ShakeMusic";
+	public static final String PLAY_MUSIC = "PlayMusic";
+	public static final String LAST_MUSIC = "LastMusic";
+	public static final String NEXT_MUSIC = "NextMusic";
+	public static final String STOP_MUSIC = "StopMusic";
+	public static final String PAUSE_MUSIC = "PauseMusic";
+	public static final String STOP_SERVER = "StopServer";
+	public static final String PPT_CONTROL = "PptControl";
+	public static final String PPT_FULL_SCREEN = "PptFullScreen";
+	public static final String PPT_PAGE_UP = "PptPageUp";
+	public static final String PPT_PAGE_DOWN = "PptPageDown";
+	public static final String PPT_STOP_FULL = "PptStopFull";
+	public static final String CAMERA_PHOTO = "CameraPhoto";
+	/**
+	 * 图片控制模式
+	 */
+	public static final String PICTURE_MODE = "PictureMode";
+	public static final String TOUCH_XY = "TouchXY";
+	public static final String LONGTOUCH_XY = "LongTouchXY";
+	public static final String CUT_PAGE = "CutPage";
+}

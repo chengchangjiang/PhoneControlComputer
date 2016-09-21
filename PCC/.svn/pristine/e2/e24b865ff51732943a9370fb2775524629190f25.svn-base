@@ -1,0 +1,85 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@drawable/back0"
+    tools:context="com.example.pcc.MainActivity" >
+
+    <ImageView
+        android:id="@+id/Show"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/background_1" />
+
+    <LinearLayout
+        android:id="@+id/lin1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="2"
+        android:layout_alignLeft="@+id/Show"
+        android:layout_below="@+id/Show"
+        android:orientation="horizontal" 
+        >
+
+        <Button
+            android:id="@+id/btn_shake"
+            android:layout_width="0.0px"
+            android:layout_height="60dp"
+            android:layout_weight="1.0"
+            android:text="摇一摇" />
+
+        <Button
+            android:id="@+id/btn_shutup"
+            android:layout_width="0.0px"
+            android:layout_height="60dp"
+            android:layout_weight="1.0"
+            android:text="远程关机" />
+        
+    </LinearLayout>
+    
+    <Button
+            android:id="@+id/btn_stopserver"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_below="@+id/lin1"
+            android:text="关闭电脑客户端" />
+
+        <Button
+            android:id="@+id/btn_desktop"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_below="@+id/btn_stopserver"
+            android:text="桌面控制" />
+
+        <Button
+            android:id="@+id/btn_aircontrol"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btn_desktop"
+            android:layout_centerHorizontal="true"
+            android:text="空调开启" />
+
+        <Button
+            android:id="@+id/ppt_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/btn_aircontrol"
+            android:layout_alignRight="@+id/btn_aircontrol"
+            android:layout_below="@+id/btn_aircontrol"
+            android:text="幻灯片放映" />
+
+        <Button
+            android:id="@+id/camera_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/ppt_button"
+            android:layout_alignRight="@+id/ppt_button"
+            android:layout_below="@+id/ppt_button"
+            android:text="拍照" />
+        
+</RelativeLayout>

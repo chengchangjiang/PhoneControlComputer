@@ -1,0 +1,85 @@
+package com.example.pcc;
+
+
+import utils.PcControlService;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.TimePicker;
+import android.widget.TimePicker.OnTimeChangedListener;
+import android.widget.Toast;
+
+public class SetShutdownTime extends BaseActivity{
+	
+	
+	private int Hour,Minute;
+	private PcControlService GetTime;
+	private TimePicker tp ;
+	private Button btnSD0Yep;
+	private Button btnSD0No;
+	private TextView tv;
+	
+	
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_shutdown0);
+			GetTime= new PcControlService(getHostInetAddress());
+		
+		/**
+		 * 设置时间初值为当前时间
+		 */
+		
+		Hour = 00;  
+	    Minute = 30 ;
+		
+		
+		/**
+		 * 确定按钮的监听，发送时间。
+		 */
+		btnSD0Yep=(Button)findViewById(R.id.btnSD0Yep);
+		btnSD0Yep.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+					GetTime.pcShutDown(Hour, Minute);
+				Toast.makeText(SetShutdownTime.this, "设置时间成功~", Toast.LENGTH_SHORT).show();
+				finish();
+			}
+		});
+		
+		
+		/*
+		 * 取消按钮的监听
+		 */
+		btnSD0No=(Button) findViewById(R.id.btnSD0No);
+		btnSD0No.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				finish();
+			}
+		});
+		
+		
+		
+		//SD设置时间
+		tv=(TextView) this.findViewById(R.id.textView1);
+	    tp=(TimePicker)this.findViewById(R.id.timePicker1);
+		tp.setIs24HourView(true);
+		tp.setCurrentHour(0);
+		tp.setCurrentMinute(30);
+		tp.setOnTimeChangedListener(new OnTimeChangedListener() {
+			@Override
+			public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+				// TODO Auto-generated method stub
+				tv.setText("你选择的时间是: " + hourOfDay + "时" + minute + "分");  
+				Hour=tp.getCurrentHour();
+				Minute=tp.getCurrentMinute();
+			}
+		});
+
+	}
+
+}

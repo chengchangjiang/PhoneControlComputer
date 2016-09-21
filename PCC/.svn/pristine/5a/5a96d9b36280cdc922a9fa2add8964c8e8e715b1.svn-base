@@ -1,0 +1,194 @@
+package com.example.pcc;
+
+
+import utils.CommandConstant;
+import utils.PcControlService;
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+import android.media.AudioManager;
+import android.media.SoundPool;
+import android.media.SoundPool.OnLoadCompleteListener;
+import android.os.Bundle;
+import android.view.Gravity;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.Toast;
+
+public class MusicActivity extends BaseActivity implements SensorEventListener  {
+
+	protected static final int RECSEIVE_COMMAND = 0;
+    Button button = null;  
+    SensorManager sensorManager = null;  
+    private boolean mJudge = false;
+    private PcControlService mPcService;
+    private Toast toast;
+    private int mSpeed=3000;//速度阀值
+    private int mInterval=80;//时间间隔
+    private long LastTime;//上次摇晃时间
+    private float LastX,LastY,LastZ;  //上一次的x、y、z坐标 
+    private SoundPool soundPool;
+    private Context context;
+    private ImageButton button_play;
+    private ImageButton button_next;
+    private ImageButton button_last;
+    private ImageButton button_stop;
+    private boolean play_flag = true;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+    	// TODO Auto-generated method stub
+    	super.onCreate(savedInstanceState);
+    	setMyContent(R.layout.activity_music);
+    	DisplayToast("温馨提示：摇一摇切歌!");
+    	button_play = (ImageButton) findViewById(R.id.music_play);
+    	button_next = (ImageButton) findViewById(R.id.music_next);
+    	button_last = (ImageButton) findViewById(R.id.music_last);
+    	button_stop = (ImageButton) findViewById(R.id.music_stop);
+    	setTitle("音乐");
+    	
+    	button_play.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO 自动生成的方法存根
+				if(play_flag){
+					mPcService.pcControlMusic(CommandConstant.PLAY_MUSIC);
+					button_play.setImageResource(R.drawable.activity_music_pause);
+					play_flag = false;
+				}else{
+					mPcService.pcControlMusic(CommandConstant.PAUSE_MUSIC);
+					button_play.setImageResource(R.drawable.activity_music_play);
+					play_flag = true;
+				}
+					
+				
+			}
+		});
+		button_next.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						// TODO 自动生成的方法存根
+						mPcService.pcControlMusic(CommandConstant.NEXT_MUSIC);
+					}
+				});
+		button_last.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO 自动生成的方法存根
+				mPcService.pcControlMusic(CommandConstant.LAST_MUSIC);
+			}
+		});
+		button_stop.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO 自动生成的方法存根
+				mPcService.pcControlMusic(CommandConstant.STOP_MUSIC);
+			}
+		});
+    	context = this;
+			mPcService = new PcControlService(getHostInetAddress());
+        	sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);  
+    	}  
+    /**
+     * Toast提示方法
+     * @param str
+     */
+    public void DisplayToast(String str){
+		Toast toast = Toast.makeText(this, str, Toast.LENGTH_SHORT);
+		toast.setGravity(Gravity.BOTTOM, 0, 220);
+		toast.show();
+	}
+
+
+	@Override  
+    protected void onPause()  
+    {  
+        super.onPause();  
+        sensorManager.unregisterListener(this);  
+    }  
+ 
+    @Override  
+    protected void onResume()  
+    {  
+      super.onResume();  
+        sensorManager.registerListener(this,  
+               sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),  
+                SensorManager.SENSOR_DELAY_NORMAL);  
+    }  
+
+
+	@Override
+	public void onSensorChanged(SensorEvent event) {
+		// TODO Auto-generated method stub
+	
+		int sensorType = event.sensor.getType();    
+		       float[] values = event.values;  
+		       long NowTime=System.currentTimeMillis(); 
+		            if((NowTime-LastTime)<mInterval) 
+		                return; 
+		                //将NowTime赋给LastTime 
+		                LastTime=NowTime; 
+		                //获取x,y,z 
+		                float NowX=event.values[0]; 
+		                float NowY=event.values[1]; 
+		                float NowZ=event.values[2]; 
+		                //计算x,y,z变化量 
+		                float DeltaX=NowX-LastX; 
+		                float DeltaY=NowY-LastY; 
+		                float DeltaZ=NowZ-LastZ; 
+		                //赋值 
+		                LastX=NowX; 
+		                LastY=NowY; 
+		                LastZ=NowZ; 
+		                //计算 
+		                double NowSpeed = Math.sqrt(DeltaX * DeltaX + DeltaY * DeltaY + DeltaZ * DeltaZ)/mInterval * 10000; 
+		                //判断 
+		                if(NowSpeed>=mSpeed) 
+		                { 
+		                	 /**
+				                * 新开线程发送指令至电脑
+				                */
+				               Thread thread = new Thread(new Runnable() {		
+									@Override
+									public void run() {
+										// TODO Auto-generated method stub
+											mJudge = mPcService.pcControlMusic(CommandConstant.SHAKE_MUSIC);
+										//发送摇一摇指令至电脑
+										if(mJudge){
+											System.out.println("-->发送成功shake");
+										}
+										else{
+											System.out.println("-->发送失败shake");
+										}
+										soundPool= new SoundPool(10,AudioManager.STREAM_SYSTEM,5);
+										soundPool.load(context,R.raw.shake,1);
+										soundPool.setOnLoadCompleteListener(new OnLoadCompleteListener(){
+											@Override
+											public void onLoadComplete(SoundPool arg0, int arg1, int arg2) {
+												soundPool.play(1,1, 1, 0, 0, 1);
+											}});
+										System.out.println("-->摇一摇音效");
+										
+									}
+								});
+								thread.start(); 
+								
+				            }
+		                } 
+		              
+		               
+		       
+	@Override
+	public void onAccuracyChanged(Sensor sensor, int accuracy) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

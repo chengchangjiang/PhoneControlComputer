@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#FFFFFF" >
+
+<ImageButton
+    android:id="@+id/music_play"
+    android:layout_width="200dp"
+    android:layout_height="200dp"
+    android:layout_centerHorizontal="true"
+    android:layout_centerVertical="true"
+    android:scaleType="fitXY"
+    android:src="@drawable/activity_music_play" 
+    android:background="@drawable/theme_button_background"/>
+
+<ImageButton
+    android:id="@+id/music_stop"
+    android:layout_width="100dp"
+    android:layout_height="100dp"
+    android:layout_alignParentBottom="true"
+    android:layout_centerHorizontal="true"
+    android:layout_marginBottom="31dp"
+    android:scaleType="fitXY"
+    android:layout_marginRight="20dp"
+    android:layout_marginLeft="20dp"
+    android:src="@drawable/activity_music_stop" 
+    android:background="@drawable/theme_button_background"/>
+
+<ImageButton
+    android:id="@+id/music_last"
+    android:layout_width="100dp"
+    android:layout_height="100dp"
+    android:layout_alignTop="@+id/music_stop"
+    android:layout_toLeftOf="@+id/music_stop"
+    android:scaleType="fitXY"
+    android:src="@drawable/activity_music_last" 
+    android:background="@drawable/theme_button_background"/>
+
+<ImageButton
+    android:id="@+id/music_next"
+    android:layout_width="100dp"
+    android:layout_height="100dp"
+    android:layout_alignTop="@+id/music_stop"
+    android:layout_toRightOf="@+id/music_stop"
+    android:scaleType="fitXY"
+    android:src="@drawable/activity_music_next" 
+    android:background="@drawable/theme_button_background"/>
+
+</RelativeLayout>

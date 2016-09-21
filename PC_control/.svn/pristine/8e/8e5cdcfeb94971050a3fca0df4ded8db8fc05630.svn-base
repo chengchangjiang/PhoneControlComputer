@@ -1,0 +1,68 @@
+package pccontrol;
+
+/*
+ * 命令执行类：通过接收到的指令执行相应的方法。
+ */
+import java.awt.Robot;
+import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.util.ArrayList;
+
+import javax.swing.JOptionPane;
+import javax.swing.WindowConstants;
+
+import org.eclipse.jface.dialogs.MessageDialog;
+
+public class CommandWork {
+	UdpSend udpSend = new UdpSend();
+
+	void SearchPc(InetAddress ip) throws IOException {
+		// TODO 自动生成的方法存根
+		udpSend.send("ReplyPing;!", ip);
+	}
+
+	void IsShutDown(String command,InetAddress ip) throws IOException {
+		// TODO 自动生成的方法存根
+		udpSend.send(command, ip);
+	}
+	public void ShutDown() throws Exception {
+		Runtime.getRuntime().exec("shutdown -s -f -t 10");
+	}
+
+	public void ShutDownCancel() throws Exception {
+		Runtime.getRuntime().exec("shutdown -a");
+	}
+
+	public void ShutDownWithTime(ArrayList<String> command) throws Exception {
+		int hour = 0, minute = 0;
+		hour = Integer.parseInt(command.get(1));
+		minute = Integer.parseInt(command.get(2));
+		System.out.println("hour = " + hour + "\n" + "minute = " + minute);
+		int time = 3600 * hour +60 * minute;
+		Runtime.getRuntime().exec("shutdown -s -f -t " + time);
+		//JOptionPane.showMessageDialog(null, "电脑将在" + hour +"小时" +minute+"分后关机", "提示", 1);
+		
+		}
+
+	public void ShutDownReset(ArrayList<String> command) throws Exception {
+		Runtime.getRuntime().exec("shutdown -a");
+		this.ShutDownWithTime(command);
+	}
+	public void ShakeMusic(ArrayList<String> command) throws Exception{
+		Robot robot = new Robot();
+		robot.keyPress(KeyEvent.VK_CONTROL);
+		robot.keyPress(KeyEvent.VK_ALT);
+		robot.keyPress(KeyEvent.VK_LEFT);
+		robot.keyRelease(KeyEvent.VK_LEFT);
+		robot.keyRelease(KeyEvent.VK_ALT);
+		robot.keyRelease(KeyEvent.VK_CONTROL);
+		System.out.println("-->执行成功");
+		
+		
+	}
+	public void PowerOff(ArrayList<String> command)throws Exception{
+		System.out.println("-->执行成功");
+		System.exit(0);
+	}
+}

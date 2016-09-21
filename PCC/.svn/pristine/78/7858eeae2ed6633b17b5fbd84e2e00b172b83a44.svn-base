@@ -1,0 +1,164 @@
+package com.example.pcc;
+
+import java.io.ByteArrayOutputStream;
+import java.net.SocketException;
+
+import utils.PcControlService;
+import android.app.Activity;
+import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnTouchListener;
+import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
+
+public class Desktop extends BaseActivity{
+	
+	private ImageView deskpic = null;
+	private PcControlService mPcService ;
+	private Bitmap bmp;
+	private ProgressBar mProgressBar;
+	private TextView mTextView;
+	private Message mMessage = new Message();
+	private float touch_x;//点击点的横坐标
+	private float touch_y;//点击点的纵坐标
+	private float xMax;//屏幕总宽
+	private float yMax;//屏幕总长
+	private WindowManager mWindowManager;
+	
+	final static int PICTURE_RECEIVE_SUCCESS = 1;
+	final static int PICTURE_RECEIVE_FAILED = 0;
+	
+		@Override
+		protected void onCreate(Bundle savedInstanceState) {
+			// TODO Auto-generated method stub
+			super.onCreate(savedInstanceState);
+			setContentView(R.layout.activity_desktop);
+			mProgressBar = (ProgressBar)findViewById(R.id.progressBar1);
+			mTextView = (TextView)findViewById(R.id.tv);
+			mProgressBar.setVisibility(View.VISIBLE);
+			mTextView.setVisibility(View.VISIBLE);
+			mWindowManager= this.getWindowManager();
+			
+			
+			 Thread thread = new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+					while(true){		
+						mMessage = new Message();			
+						mPcService = new PcControlService(getHostInetAddress());					
+						byte[] imageByte = null;
+						try {
+							imageByte = mPcService.pcPictureMode();
+						} catch (SocketException e) {
+							e.printStackTrace();
+						}
+						ByteArrayOutputStream outPut = new ByteArrayOutputStream();
+						if(imageByte == null){
+							mMessage.what = PICTURE_RECEIVE_FAILED;
+							mHandler.sendMessage(mMessage);
+						}
+						else if(imageByte.length!=0){  
+				        	
+				        	bmp = BitmapFactory.decodeByteArray(imageByte, 0, imageByte.length);
+				        	
+				        	if(bmp == null){
+				        		System.out.println("-->图片还原失败");
+				        		
+				        	}else{
+				        		System.out.println("-->图片可被还原");
+				        		bmp.compress(CompressFormat.JPEG, 50, outPut);
+					        	mMessage.what=PICTURE_RECEIVE_SUCCESS;
+					        	mHandler.sendMessage(mMessage);
+					        	
+				        	}
+				        	
+							
+						
+				        }
+					}
+				}
+			});
+			 
+			thread.start();		
+			
+		}
+		/**
+		 * 捕捉异步消息，并执行
+		 */
+		Handler mHandler = new Handler(){  
+            @Override  
+            public void handleMessage(Message msg){  
+                // call update gui method.  
+            	if(msg.what == PICTURE_RECEIVE_SUCCESS){
+            		mProgressBar.setVisibility(View.GONE);
+					mTextView.setVisibility(View.GONE);
+            		deskpic = (ImageView) findViewById(R.id.desk_pic);
+            		xMax = mWindowManager.getDefaultDisplay().getWidth();
+            		yMax = mWindowManager.getDefaultDisplay().getHeight();
+            		bmp = FitTheScreenSizeImage(bmp,(int)xMax,(int)yMax);
+            		
+					deskpic.setImageBitmap(bmp);
+					System.out.println("-->展示图片:"+bmp);
+					
+					deskpic.setOnTouchListener(new OnTouchListener() {
+						
+						@Override
+						public boolean onTouch(View v, MotionEvent event) {
+							// TODO 自动生成的方法存根
+							touch_x = event.getX();
+							touch_y = event.getY();
+							mPcService.pcTouchXY(touch_x,touch_y,xMax,yMax);
+							return false;
+						}
+					});
+            	}
+            	else{
+            		System.out.println("-->展示图片失败");
+            		mProgressBar.setVisibility(View.GONE);
+            		mTextView.setText("显示图片失败");
+            	}
+            		
+            }
+		};
+        /**
+         * 使图片充满屏幕 
+         */
+        
+		public static Bitmap FitTheScreenSizeImage(Bitmap m,int ScreenWidth, int ScreenHeight)
+		{
+		        float width  = (float)ScreenWidth/m.getWidth();
+		        float height = (float)ScreenHeight/m.getHeight();
+		        Matrix matrix = new Matrix();
+		        matrix.postScale(width,height);
+		        return Bitmap.createBitmap(m, 0, 0, m.getWidth(), m.getHeight(), matrix, true);
+		 }
+		
+		
+		@Override
+		protected void onResume(){
+			super.onResume();
+
+		}
+		@Override
+		protected void onDestroy() {
+			// TODO 自动生成的方法存根
+			super.onDestroy();
+
+		}
+		}
+		
+

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.pcc.ray.ppttest.MainActivity">
+    <ImageView
+        android:layout_marginTop="100dp"
+        android:layout_width="match_parent"
+<<<<<<< .mine
+        android:layout_height="match_parent"
+=======
+        android:layout_height="220dp"
+>>>>>>> .r61
+        android:scaleType="fitXY"
+        android:id="@+id/printf_ppt_imageview"/>
+
+    <ImageButton
+        android:id="@+id/next_ppt_button"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:scaleType="fitXY"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="69dp"
+        android:layout_marginRight="62dp"
+        android:src="@drawable/ppt_activity_next_ppt"
+        android:background="@drawable/theme_button_background"/>
+
+    <ImageButton
+        android:id="@+id/previous_ppt_button"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@+id/next_ppt_button"
+        android:layout_marginLeft="64dp"
+        android:src="@drawable/ppt_activity_previous_ppt"
+        android:background="@drawable/theme_button_background"
+        android:scaleType="fitXY" />
+
+</RelativeLayout>

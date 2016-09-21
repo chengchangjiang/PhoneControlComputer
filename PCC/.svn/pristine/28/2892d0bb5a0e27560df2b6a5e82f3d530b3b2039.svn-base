@@ -1,0 +1,232 @@
+package com.example.pcc;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import utils.PcControlService;
+import utils.PcControlServiceImp;
+
+public class MainActivity extends BaseActivity implements OnClickListener{
+	
+	static final private int PC_IS_SHUT_DOWN = 1;
+	static final private int PC_IS_NOT_SHUT_DOWN = 2;
+//	/**
+//	 * 空调控制
+//	 */
+//	private Button btnaircontrol;
+	/**
+	 * 摇一摇按钮
+	 */
+	private ImageButton mMusicButton;
+//	/**
+//	 * 关闭客户端
+//	 */
+//	private Button btnpoweroff;
+	/**
+	 * 关机
+	 */
+	private ImageButton mShutdownButton;
+	/**
+	 * 桌面
+	 */
+	private ImageButton mDesktopButton;
+	private ImageButton mPictureButton;
+	private ImageButton mPptButton;
+	private ImageButton mMoreButton;
+	private PcControlService mService;
+	/**
+	 * 用于控制电脑
+	 */
+	private Handler mHandler = new Handler(){
+		public void dispatchMessage(Message msg) {
+			
+			Intent intent;
+			Log.d("eric","Is_Shut_Down"+msg.what);
+			switch(msg.what){
+			case PC_IS_NOT_SHUT_DOWN:
+				intent = new Intent(MainActivity.this, SetShutdownTime.class);
+				Log.d("eric","Is_Shut_Down"+"false");
+				intent.putExtra("IsShutDown", false);
+				startActivity(intent);
+				break;
+			case PC_IS_SHUT_DOWN:
+				intent = new Intent(MainActivity.this,SetShutdownTime.class);
+				Log.d("eric","Is_Shut_Down"+"ture");
+				intent.putExtra("IsShutDown", true);
+				startActivity(intent);
+				break;
+			default:
+				break;
+			}
+		};
+	};
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setMyContent(R.layout.activity_main_test);
+		
+		mService = new PcControlService(getHostInetAddress());
+		initMyView();
+		setTitle("电脑控制");
+	}
+		
+	private void initMyView(){
+		mMusicButton = (ImageButton) findViewById(R.id.music_button);
+        mDesktopButton = (ImageButton)findViewById(R.id.desktop_button);
+//		btnpoweroff = (Button) findViewById(R.id.btn_stopserver);	
+//		btnaircontrol = (Button)findViewById(R.id.btn_aircontrol);
+		mShutdownButton=(ImageButton)this.findViewById(R.id.shutdown_button);
+		mPptButton = (ImageButton)findViewById(R.id.ppt_button);
+		mPictureButton = (ImageButton)findViewById(R.id.picture_button);
+		mMoreButton = (ImageButton)findViewById(R.id.more_button);
+		
+		mPictureButton.setOnClickListener(this);
+		mPptButton.setOnClickListener(this);
+		mShutdownButton.setOnClickListener(this);
+		mMusicButton.setOnClickListener(this);
+        mDesktopButton.setOnClickListener(this);
+        mMoreButton.setOnClickListener(this);
+//		btnpoweroff.setOnClickListener(this);
+//		btnaircontrol.setOnClickListener(this);
+	}
+		@Override 
+	public void onBackPressed() {  
+		leave();
+	}
+
+	/**
+	 * 弹窗
+	 */
+	public void leave()                                            
+	{
+		AlertDialog.Builder dialog=new AlertDialog.Builder(MainActivity.this);
+        dialog.setTitle("您真的要离开吗？").setPositiveButton("退出", new DialogInterface.OnClickListener() {
+        	@Override
+        	public void onClick(DialogInterface dialog, int which) {
+            	 finish();
+        	}
+         }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+        	 
+        	 public void onClick(DialogInterface dialog, int which) {
+                 dialog.cancel();//取消弹出框
+        	 }
+         }).create().show();
+	}
+	
+		
+		
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		int id = item.getItemId();
+		if (id == R.id.action_settings) {
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	public void onClick(View v) {
+		Intent concult;
+		Thread thread;
+		switch(v.getId()) {
+//		case R.id.btn_aircontrol:
+//			concult = new Intent(MainActivity.this,AirControlActivity.class);
+//			startActivity(concult);
+//			break;
+		case R.id.music_button:
+			concult = new Intent(MainActivity.this, MusicActivity.class);
+			startActivity(concult);
+			break;
+		case R.id.shutdown_button:
+			thread = new Thread(new JudgePcIsShutdown(this));
+			thread.start();
+			break;
+//		case R.id.btn_stopserver:
+//			thread = new Thread(new StopServer());
+//			thread.start();
+//			break;
+		case R.id.desktop_button:
+			concult=new Intent(MainActivity.this,Desktop.class);
+			startActivity(concult);
+			break;
+		case R.id.ppt_button:
+			concult = new Intent(this, PPTControlActivity.class);
+			startActivity(concult);
+			break;
+		case R.id.picture_button:
+			concult = new Intent(this, CameraActivity.class);
+			startActivity(concult);
+			break;
+		case R.id.more_button:
+			concult = new Intent(this, MoreActivity.class);
+			startActivity(concult);
+			break;
+		default:
+			
+			break;
+		}
+	}
+	
+	
+	/**
+	 * 用于判断主机是否关机
+	 * @author Lqq
+	 *
+	 */
+	private class JudgePcIsShutdown implements Runnable{
+		
+		private BaseActivity mContext;
+		public JudgePcIsShutdown(BaseActivity context) {
+			mContext = context;
+		}
+		@Override
+		public void run() {
+			showProgressDialog(R.string.juge_pc_is_shutdown);
+			Log.d("eric","Judge"+mService.pcIsShutDown());
+			if(mService.pcIsShutDown()){
+				mHandler.sendEmptyMessage(PC_IS_SHUT_DOWN);
+			}else{
+				mHandler.sendEmptyMessage(PC_IS_NOT_SHUT_DOWN);
+			}
+			closeProgressDialog();
+		}
+		
+	}
+	
+	/**
+	 * 用于关闭主机的服务端
+	 * @author Lqq
+	 *
+	 */
+	private class StopServer implements Runnable{
+		@Override
+		public void run() {
+			mService.pcStopServer();
+		}
+		
+	}
+	
+	@Override
+	protected void toDoGetHostAddress() {
+		super.toDoGetHostAddress();
+		mService = new PcControlService(getHostInetAddress());
+	}
+}

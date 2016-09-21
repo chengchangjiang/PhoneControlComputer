@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+    <ViewFlipper
+        android:id="@+id/viewFlipper1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:persistentDrawingCache="animation"
+        android:autoStart="false"
+        android:flipInterval="1000"
+         >
+         <LinearLayout 
+             android:orientation="horizontal"  
+            android:layout_width="fill_parent" 
+            android:layout_height="fill_parent"> 
+            
+            <ImageView  
+                android:src="@drawable/arts1" 
+                android:layout_width="fill_parent" 
+                android:layout_height="fill_parent" 
+                android:scaleType="fitXY"> 
+            </ImageView> 
+        </LinearLayout> 
+        
+        <LinearLayout 
+            android:orientation="horizontal"  
+            android:layout_width="fill_parent" 
+            android:layout_height="fill_parent"> 
+            
+            <ImageView  
+                android:src="@drawable/arts2" 
+                android:layout_width="fill_parent" 
+                android:layout_height="fill_parent" 
+                android:scaleType="fitXY"> 
+            </ImageView> 
+        </LinearLayout> 
+        <LinearLayout 
+            android:orientation="horizontal" 
+            android:layout_width="fill_parent" 
+            android:layout_height="fill_parent"> 
+            <ImageView  
+                android:src="@drawable/arts3" 
+                android:layout_width="fill_parent" 
+                android:layout_height="fill_parent" 
+                android:scaleType="fitXY"
+            > 
+            </ImageView> 
+        </LinearLayout> 
+    </ViewFlipper>
+
+</LinearLayout>
